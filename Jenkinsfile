@@ -1,12 +1,12 @@
-@Library('sharedLib') _
-
 pipeline {
     agent any
 
     stages {
         stage('Docker Login') {
             steps {
-                dockerLogin('dockerhub-credentials')
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
+                }
             }
         }
         
@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     echo "Building and pushing Docker image..."
-                    // Yahan aap apna docker build aur push ka code likh sakte hain
+                    // Yahan aap apna docker build aur push ka command likh sakte hain
                 }
             }
         }
